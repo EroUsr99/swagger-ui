@@ -25,6 +25,7 @@ window.onload = function() {
     url: pathMap[currentPath],
     dom_id: '#swagger-ui',
     deepLinking: true,
+    defaultModelsExpandDepth: 1, // Expands the schema by default
     presets: [
       SwaggerUIBundle.presets.apis,
       SwaggerUIStandalonePreset
@@ -32,8 +33,17 @@ window.onload = function() {
     plugins: [
       SwaggerUIBundle.plugins.DownloadUrl
     ],
-    layout: "StandaloneLayout"
+    layout: "StandaloneLayout",
+    configUrl: "",
+    showExtensions: true,
+    showCommonExtensions: true
   });
+
+  // Remove top black bar and server dropdown after UI loads
+  setTimeout(() => {
+    document.querySelector(".topbar")?.remove();
+    document.querySelector(".servers")?.remove();
+  }, 500);
 
   //</editor-fold>
 };
