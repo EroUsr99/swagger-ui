@@ -1,0 +1,117 @@
+openapi: 3.0.1
+info:
+  title: Macadam Status Update API
+  description: API for updating the status of assessments for Macadam.
+  version: 1.0.0
+servers:
+  - url: https://api.poweredbyams.com/macadam/se/v1
+    description: Sweden API Server
+  - url: https://api.poweredbyams.com/macadam/no/v1
+    description: Norway API Server
+paths:
+  /status/update:
+    post:
+      summary: Update assessment status
+      description: Updates the status of an assessment with relevant details.
+      operationId: updateAssessmentStatus
+      security:
+        - api_key: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MacadamStatusUpdate'
+      responses:
+        '200':
+          description: Message was received successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  body:
+                    type: string
+                    example: "Message was received successfully"
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid request body"
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: POST
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{lambdaArn}/invocations
+        passthroughBehavior: when_no_match
+        payloadFormatVersion: "2.0"
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+  schemas:
+    MacadamStatusUpdate:
+      type: object
+      required:
+        - assessmentFileId
+        - assessmentStatusId
+        - assessmentFileStatusId
+        - vin
+        - updatedAt
+        - updatedByUser
+      properties:
+        assessmentFileId:
+          type: integer
+          description: The internal, unique ID of the assessment.
+        assessmentStatusId:
+          type: integer
+          description: Status of the assessment.
+        assessmentFileStatusId:
+          type: integer
+          description: Substatus of the assessment.
+        license:
+          type: string
+          minLength: 6
+          maxLength: 20
+          description: License of the assessed vehicle.
+        vin:
+          type: string
+          minLength: 17
+          maxLength: 17
+          description: VIN of the assessed vehicle.
+        orderExternalReference:
+          type: string
+          maxLength: 50
+          description: The external, unique ID of the order (customer application).
+        contractReference:
+          type: string
+          maxLength: 50
+          description: The external, unique ID of the contract (customer application).
+        updatedAt:
+          type: string
+          format: date-time
+          description: DateTime (UTC) when status was set.
+        updatedByUser:
+          type: object
+          properties:
+            email:
+              type: string
+              maxLength: 255
+              description: User email of who triggered the new status.
+            firstName:
+              type: string
+              maxLength: 255
+              description: User first name of who triggered the new status.
+            lastName:
+              type: string
+              maxLength: 255
+              description: User last name of who triggered the new status.
