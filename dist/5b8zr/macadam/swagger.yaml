@@ -4,10 +4,8 @@ info:
   description: API for updating the status of assessments for Macadam.
   version: 1.0.0
 servers:
-  - url: https://api.poweredbyams.com/macadam/se/v1
-    description: Sweden API Server
-  - url: https://api.poweredbyams.com/macadam/no/v1
-    description: Norway API Server
+  - url: https://api-docs.poweredbyams.com/5b8zr/macadam/
+    description: Macadam API Server
 paths:
   /status/update:
     post:
