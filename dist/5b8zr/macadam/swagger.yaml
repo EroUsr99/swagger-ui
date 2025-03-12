@@ -1,19 +1,25 @@
 openapi: 3.0.1
 info:
-  title: Macadam Status Update API
-  description: API for updating the status of assessments for Macadam.
+  title: Macadam to AMS Status Update API
+  description: API for AMS to receive status of assessments from Macadam.
   version: 1.0.0
 servers:
-  - url: https://api-docs.poweredbyams.com/5b8zr/macadam/
-    description: Macadam API Server
+  - url: https://api.poweredbyams.com/macadam
+    description: Macadam API Server (Live API Calls)
 paths:
   /status/update:
     post:
-      summary: Update assessment status
       description: Updates the status of an assessment with relevant details.
       operationId: updateAssessmentStatus
       security:
         - api_key: []
+      parameters:
+        - in: header
+          name: x-api-key
+          schema:
+            type: string
+          required: true
+          description: API key required for authentication.
       requestBody:
         required: true
         content:
