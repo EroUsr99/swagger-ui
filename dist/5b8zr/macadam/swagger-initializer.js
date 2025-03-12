@@ -11,12 +11,12 @@ window.onload = function() {
   };
 
   // Extract the supplier folder from the URL
-  let currentPath = window.location.pathname.split('/')[1] + '/' + window.location.pathname.split('/')[2];
+  let pathSegments = window.location.pathname.split('/').filter(segment => segment);
+  let currentPath = pathSegments.length >= 2 ? pathSegments[0] + '/' + pathSegments[1] : null;
 
   // Check if the path exists in our map
   if (!pathMap[currentPath]) {
-    // Redirect to root (or show an error page)
-    window.location.href = "https://api-docs.poweredbyams.com/";
+    document.body.innerHTML = "<h2 style='text-align:center;color:red;'>Access Denied: Invalid Supplier</h2>";
     return;
   }
 
